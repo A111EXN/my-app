@@ -19,11 +19,20 @@ const HomeScreen = () => {
   return (
     <View style={styles.container}>
       <Text>Email: {auth.currentUser?.email}</Text>
+      <Text style={styles.userinfoText}>Username:{}</Text>
+      <Text style={styles.userinfoText}>Nickname:{}</Text>
+      <Text style={styles.userinfoText}>Age:{}</Text>
       <TouchableOpacity
       onPress={handleSignOut}
       style={styles.button}
       >
         <Text style={styles.buttonText}>Sign Out</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+      onPress={()=>{navigation.replace("EditInfo")}}
+      style={styles.button}
+      >
+        <Text style={styles.buttonText}>Account Information</Text>
       </TouchableOpacity>
     </View>
   )
@@ -45,10 +54,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 50,
   }, 
-
   buttonText: {
-      color: 'white',
-      fontWeight: '700',
-      fontSize: 16, 
+    color: 'white',
+    fontWeight: '700',
+    fontSize: 16, 
   }, 
+  userinfoText:{
+    marginTop: 10,
+  }
 })
