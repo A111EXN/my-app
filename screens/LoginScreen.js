@@ -1,10 +1,25 @@
 import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from 'react'
+import { auth } from '../firebase';
 
 const LoginScreen = () => {
 
     const [email,setEmail] = useState ('')
     const [password,setPassword] = useState ('')
+
+
+    const handleSignup=(e)=>{
+        e.preventDefault()
+        createUserWithEmailAndPassword(auth,email,password)
+        .then (res=>{
+          console.log(res)
+        })
+        .catch(err=>{
+          console.log(err)
+        })
+      }
+
 
   return (
     <KeyboardAvoidingView
@@ -35,7 +50,7 @@ const LoginScreen = () => {
                 <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity
-            onPress={() => {}}
+            onPress={handleSignup}
             style={[styles.button,styles.buttonOutline]}
             >
                 <Text style={styles.buttonOutlineText}>Register</Text>
