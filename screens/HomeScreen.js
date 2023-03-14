@@ -1,12 +1,13 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { auth } from '../firebase'
+import React, { useEffect, useState } from 'react'
+import { auth, db } from '../firebase'
 import { useNavigation } from '@react-navigation/native'
+import { collection, getDocs, doc, query, where } from 'firebase/firestore'
 
 const HomeScreen = () => {
 
   const navigation = useNavigation()
-
+  
   const handleSignOut = () => {
     auth
     .signOut()
@@ -16,12 +17,45 @@ const HomeScreen = () => {
     .catch(error=>alert (error.message))
   }
 
+
+  // const colRef = collection(db, "user");
+
+  // const docsSnap = await getDocs(colRef);
+
+
+
+
+  const user = auth.currentUser
+  const [userinfo,setUserinfo]=useState({id:"toto"})//useState([])
+
+
+  useEffect(() => { 
+    
+    const userRef = collection(db,"user")
+    const q = query(userRef,where("email","==",user.email))
+    getDocs(q,userRef)
+    .then(res=>{
+      // console.log('match found')
+      const users = res.docs.map(item=>({
+          id:item.id,
+          ...item.data()
+      }))
+      // console.log(users)
+      setUserinfo(users)
+  })
+  .catch(err=>console.log(err))
+  
+  }, [user.email])
+
+
+
+
   return (
     <View style={styles.container}>
-      <Text>Email: {auth.currentUser?.email}</Text>
-      <Text style={styles.userinfoText}>Username:{}</Text>
-      <Text style={styles.userinfoText}>Nickname:{}</Text>
-      <Text style={styles.userinfoText}>Age:{}</Text>
+      <Text>Emaild2: {auth.currentUser?.email}</Text>
+      <Text style={styles.userinfoText}>Username:{userinfo[0].username}</Text>
+      <Text style={styles.userinfoText}>Nickname:{userinfo[0].nickname}</Text>
+      <Text style={styles.userinfoText}>Age:{userinfo[0].age}</Text>
       <TouchableOpacity
       onPress={handleSignOut}
       style={styles.button}

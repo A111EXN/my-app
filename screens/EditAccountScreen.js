@@ -14,7 +14,7 @@ const EditAccountScreen = () => {
   const navigation = useNavigation()
 
   function create () {
-    setDoc(doc(db, "user","test"), {
+    addDoc(collection(db, "user"), {
       email: email,
       username: username,
       nickname: nickname,
